@@ -3,7 +3,8 @@ from github import Github
 
 # XXX: Specify your own access token here
 
-ACCESS_TOKEN = '10d7a57708edb441ed0a7237e0e8415dca4f6674'
+ACCESS_TOKEN = '10d7a57708edb441ed0a7237e0e8415dca4f6674' #github revokes token if we commit in public repo 
+#replace above token with af5543ad0d765f74cc0b01609f8e756bf22cc397
 
 # Specify a username and repository of interest for that user.
 
