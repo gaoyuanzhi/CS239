@@ -5,6 +5,7 @@ from github import Github
 
 ACCESS_TOKEN = '10d7a57708edb441ed0a7237e0e8415dca4f6674' #github revokes token if we commit in public repo 
 #replace above token with af5543ad0d765f74cc0b01609f8e756bf22cc397
+# it removes even in comments zzzzzzzzzzzzz
 
 # Specify a username and repository of interest for that user.
 
