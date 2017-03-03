@@ -1,0 +1,10 @@
+scikit-learn/scikit-learn
+josephmisiti/awesome-machine-learning
+apache/incubator-predictionio
+hangtwenty/dive-into-machine-learning
+clips/pattern
+numenta/nupic
+JohnLangford/vowpal_wabbit
+airbnb/aerosolve
+sjwhitworth/golearn
+johnmyleswhite/ML_for_Hackers
