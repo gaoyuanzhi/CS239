@@ -83,21 +83,25 @@ if __name__ == '__main__':
 	ACCESS_TOKEN = conf.access_token
 	client = Github(ACCESS_TOKEN, per_page=100)
 	
-	f = open('../../data/top10MLProjects.txt', "r")
+	f = open('../../data/networkAnalysisGits.txt', "r")
 	projects = f.readlines()
 	f.close()
 	projects = [x.strip() for x in projects]
 	# print projects
 
-	states = []
+	stats = []
+	i = 0
 	for project in projects:
+
 		print "Project: {}".format(project)
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
-		states.append({project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]})
+		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
+		i += 1
+		f = open('../../data/' + str(i) + '.json', "wr")
+		f.write(json.dumps(stats))
+		f.close()
 
 	
-	f = open('../../data/top10MLProjectStates.json', "wr")
-	f.write(json.dumps(states))
-	f.close()
+
