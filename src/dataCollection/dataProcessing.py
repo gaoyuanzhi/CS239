@@ -79,13 +79,13 @@ def generatePopularityChagneGraph(id):
 	ax.plot(xy1.keys(),xy1.values(),'k:', label='forks')
 	ax.plot(popularity.keys(),popularity.values(),'k',color = 'green',label='popularity')
 	# ax.set_xlabel('Time')
+	legend = ax.legend(loc='upper left', shadow=False,  fontsize='small')
 
 	ax2 = ax.twinx()
 	ax2.set_ylabel('change', color='blue')
 	ax2.tick_params('y', colors='blue')
 	ax2.plot(changes.keys(),changes.values(),'k',color='blue',label='change')
 
-	legend = ax.legend(loc='upper left', shadow=True,  fontsize='x-large')
 	# legend.get_frame().set_facecolor('#00FFCF')
 
 	# beautify the x-labels
