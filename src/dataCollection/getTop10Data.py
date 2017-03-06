@@ -79,11 +79,10 @@ class Repo:
 	
 	def get_change_stats_over_time_method2(self):
 		"""
-		return a list of 3 values [files_changed,additions,deletions]
+		return time series and its corresponding readme lines
+		the returned readme lines only reflex changes in readme, needs to be re-processed to get total size over time
 		"""
-		# date = datetime.datetime(2015,2,15)
-		print "change"
-		init_readme = 1;
+		print "change-method2"
 		changes_over_time_method2 = defaultdict(int)
 		for commit in self.repo.get_commits():
 			
