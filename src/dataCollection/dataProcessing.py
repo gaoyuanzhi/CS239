@@ -106,6 +106,7 @@ def generatePopularityChagneGraph(id):
 		f.write("\n{}\t{}\t{}".format(x[0].strftime("%Y%m%d"),x[1],x[2]))
 	plt.savefig("../../data/fig/" + str(id)+".pdf")
 	f.close()
+	
 if __name__ == '__main__':
-	for x in xrange(1,10):
+	for x in xrange(1,11):
 		generatePopularityChagneGraph(x)
