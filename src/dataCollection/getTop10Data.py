@@ -20,10 +20,11 @@ class Repo:
 			change stats over time
 				dict of month:[files,additions,deletions]
 		"""
-		self.num_pr = self.get_num_pr()
-		self.stars_over_time = self.get_stars_over_time()
-		self.forks_over_time = self.get_forks_over_time()
-		self.change_stats_over_time = self.get_change_stats_over_time()
+		# self.num_pr = self.get_num_pr()
+		# self.stars_over_time = self.get_stars_over_time()
+		# self.forks_over_time = self.get_forks_over_time()
+		# self.change_stats_over_time = self.get_change_stats_over_time()
+		self.change_stats_over_time_method2 = self.get_change_stats_over_time_method2()
 
 	def bucketize_dates(self, list_of_dates):
 		dates = defaultdict(int)
@@ -75,7 +76,25 @@ class Repo:
 			changes_over_time[yearMonth][1]+=additions
 			changes_over_time[yearMonth][2]+=deletions
 		return changes_over_time
+	
+	def get_change_stats_over_time_method2(self):
+		"""
+		return a list of 3 values [files_changed,additions,deletions]
+		"""
+		# date = datetime.datetime(2015,2,15)
+		print "change"
+		init_readme = 1;
+		changes_over_time_method2 = defaultdict(int)
+		for commit in self.repo.get_commits():
+			
+			for each_file in commit.files:
+				timestamp = commit.commit.author.date
+				yearMonth,day = str(timestamp).rsplit("-",1)
+				if each_file.filename == 'README.md':
+						changes_over_time_method2[yearMonth] += each_file.additions - each_file.deletions
+
 		
+		return changes_over_time_method2
 
 
 if __name__ == '__main__':
@@ -83,7 +102,7 @@ if __name__ == '__main__':
 	ACCESS_TOKEN = conf.access_token
 	client = Github(ACCESS_TOKEN, per_page=100)
 	
-	f = open('../../data/networkAnalysisGits.txt', "r")
+	f = open('../../data/top10MLProjects.txt', "r")
 	projects = f.readlines()
 	f.close()
 	projects = [x.strip() for x in projects]
@@ -97,11 +116,17 @@ if __name__ == '__main__':
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
-		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
+		# stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
 		i += 1
-		f = open('../../data/' + str(i) + '.json', "wr")
-		f.write(json.dumps(stats))
+		# f = open('../../data/' + str(i) + '.json', "wr")
+		# f.write(json.dumps(stats))
+		# f.close()
+
+		# stats2 = {project:[r.change_stats_over_time_method2]}
+		f = open('../../data/method2-on-dataset' + str(i) + '.json', "wr")
+		f.write(json.dumps(stats2))
 		f.close()
+
 
 	
 
