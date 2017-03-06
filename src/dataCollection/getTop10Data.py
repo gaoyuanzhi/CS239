@@ -108,6 +108,7 @@ if __name__ == '__main__':
 	# print projects
 
 	stats = []
+	stats2 = []
 	i = 0
 	for project in projects:
 
