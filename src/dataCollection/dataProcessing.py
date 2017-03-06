@@ -73,6 +73,14 @@ def generatePopularityChagneGraph(id):
 
 	changes = collections.OrderedDict(sorted(changes.items()))
 
+	output = []
+	for key,value in changes.items():
+		if key in popularity.keys():
+			output.append([key,popularity[key],value])
+		else:
+			output.append([key,0,value])
+
+
 # with plt.xkcd():
 	fig, ax = plt.subplots()
 	ax.plot(xy0.keys(),xy0.values(),'k--', label='stars')
@@ -92,9 +100,12 @@ def generatePopularityChagneGraph(id):
 	plt.gcf().autofmt_xdate()
 	# plt.axes().set_aspect(1)
 	# plt.show()
-
+	f = open("../../data/p_c_"+str(id)+".tsv",'wr')
+	f.write("date\tpupularity\tchange")
+	for x in output:
+		f.write("\n{}\t{}\t{}".format(x[0].strftime("%Y%m%d"),x[1],x[2]))
 	plt.savefig("../../data/fig/" + str(id)+".pdf")
-
+	f.close()
 if __name__ == '__main__':
 	for x in xrange(1,10):
 		generatePopularityChagneGraph(x)
