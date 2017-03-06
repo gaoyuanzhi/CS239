@@ -20,10 +20,10 @@ class Repo:
 			change stats over time
 				dict of month:[files,additions,deletions]
 		"""
-		# self.num_pr = self.get_num_pr()
-		# self.stars_over_time = self.get_stars_over_time()
-		# self.forks_over_time = self.get_forks_over_time()
-		# self.change_stats_over_time = self.get_change_stats_over_time()
+		self.num_pr = self.get_num_pr()
+		self.stars_over_time = self.get_stars_over_time()
+		self.forks_over_time = self.get_forks_over_time()
+		self.change_stats_over_time = self.get_change_stats_over_time()
 		self.change_stats_over_time_method2 = self.get_change_stats_over_time_method2()
 
 	def bucketize_dates(self, list_of_dates):
@@ -116,13 +116,13 @@ if __name__ == '__main__':
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
-		# stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
+		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
 		i += 1
-		# f = open('../../data/' + str(i) + '.json', "wr")
-		# f.write(json.dumps(stats))
-		# f.close()
+		f = open('../../data/' + str(i) + '.json', "wr")
+		f.write(json.dumps(stats))
+		f.close()
 
-		# stats2 = {project:[r.change_stats_over_time_method2]}
+		stats2 = {project:[r.change_stats_over_time_method2]}
 		f = open('../../data/method2-on-dataset' + str(i) + '.json', "wr")
 		f.write(json.dumps(stats2))
 		f.close()
