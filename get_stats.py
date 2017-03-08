@@ -81,6 +81,7 @@ class Repo:
 		for commit in self.repo.get_commits():
 			for f in commit.files:
 				if is_documentation(f.filename):
+					print f.filename
 					timestamp = commit.commit.author.date
 					yearMonth,day = str(timestamp).rsplit("-",1)
 
