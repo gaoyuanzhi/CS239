@@ -2,7 +2,19 @@ from github import Github
 from collections import defaultdict
 import datetime
 import conf
+import os
 
+
+def is_documentation(filename):
+	"""
+	check if extension is 
+	"""
+	valid_extensions = {'pdf':1, 'txt':1, 'md':1, 'jpg':1, 'png':1,'ps':1,'mp4':1}
+	filename, file_extension = os.path.splitext(filename)
+	if file_extension in valid_extensions:
+		return True
+	else:
+		return False
 class Repo:
 	def __init__(self,repo):
 		self.repo = repo
@@ -23,6 +35,7 @@ class Repo:
 		self.stars_over_time = self.get_stars_over_time()
 		self.forks_over_time = self.get_forks_over_time()
 		self.change_stats_over_time = self.get_change_stats_over_time()
+		self.readme_size = self.get_readme_size()
 
 	def bucketize_dates(self, list_of_dates):
 		dates = defaultdict(int)
@@ -55,6 +68,9 @@ class Repo:
 		forks_over_time = self.bucketize_dates(list_fork_dates)
 		return forks_over_time
 
+	def get_readme_size(self):
+		self.repo.get_readme().size
+
 	def get_change_stats_over_time(self):
 		"""
 		return a list of 3 values [files_changed,additions,deletions]
@@ -62,31 +78,17 @@ class Repo:
 		# date = datetime.datetime(2015,2,15)
 		changes_over_time = defaultdict(lambda: [0,0,0])
 		for commit in self.repo.get_commits():
-			num_files_changed = len(commit.files)
-			timestamp = commit.commit.author.date
-			yearMonth,day = str(timestamp).rsplit("-",1)
-			additions = commit.stats.additions
-			deletions = commit.stats.deletions
-			changes_over_time[yearMonth][0]+=num_files_changed
-			changes_over_time[yearMonth][1]+=additions
-			changes_over_time[yearMonth][2]+=deletions
+			for f in commit.files:
+				if is_documentation(f.filename):
+					timestamp = commit.commit.author.date
+					yearMonth,day = str(timestamp).rsplit("-",1)
+
+					changes_over_time[yearMonth][0] += 1
+					changes_over_time[yearMonth][1]+=f.additions
+					changes_over_time[yearMonth][2]+=f.deletions
 		return changes_over_time
 
 
-if __name__ == '__main__':
-	
-	ACCESS_TOKEN = conf.access_token
-	USER = 'freeCodeCamp'
-	client = Github(ACCESS_TOKEN, per_page=100)
 
-	# repo = client.get_repo('freeCodeCamp/freeCodeCamp')
-	# repo = client.get_repo('kamranahmedse/design-patterns-for-humans')
-	repo = client.get_repo('freeCodeCamp/caption-dashboard')
 
-	r = Repo(repo)
-	r.get_repo_stats()
-	print '{}:\n \t stars: {} \n\t forks: {} \n\t pulls: {}' .format(r.name,r.stargazers_count,r.forks_count,r.num_pr)
-	print r.stars_over_time
-	print r.forks_over_time
-	print r.change_stats_over_time
 	
