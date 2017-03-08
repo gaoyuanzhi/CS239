@@ -9,12 +9,13 @@ def is_documentation(filename):
 	"""
 	check if extension is 
 	"""
-	valid_extensions = {'pdf':1, 'txt':1, 'md':1, 'jpg':1, 'png':1,'ps':1,'mp4':1}
+	valid_extensions = {'.pdf':1, '.txt':1, '.md':1, '.jpg':1, '.png':1,'.ps':1,'.mp4':1}
 	filename, file_extension = os.path.splitext(filename)
 	if file_extension in valid_extensions:
 		return True
 	else:
 		return False
+		
 class Repo:
 	def __init__(self,repo):
 		self.repo = repo
