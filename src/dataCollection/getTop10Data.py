@@ -4,12 +4,26 @@ import datetime
 import conf
 import json
 
+
+
 class Repo:
 	def __init__(self,repo):
 		self.repo = repo
 		self.name = repo.name
 		self.stargazers_count = repo.stargazers_count
 		self.forks_count = repo.forks_count
+
+	def is_documentation(self,filename):
+		"""
+		check if extension is 
+		"""
+		valid_extensions = {'.pdf':1, '.txt':1, '.md':1, '.jpg':1, '.png':1,'.ps':1,'.mp4':1}
+		filename, file_extension = os.path.splitext(filename)
+		if file_extension in valid_extensions:
+			return True
+		else:
+			return False
+
 	def get_repo_stats(self):
 		"""
 		repo is a PyGitHub Repository Object
@@ -21,6 +35,7 @@ class Repo:
 				dict of month:[files,additions,deletions]
 		"""
 		self.num_pr = self.get_num_pr()
+		self.pulls_over_time = self.get_pulls_over_time()
 		self.stars_over_time = self.get_stars_over_time()
 		self.forks_over_time = self.get_forks_over_time()
 		self.change_stats_over_time = self.get_change_stats_over_time()
@@ -39,6 +54,15 @@ class Repo:
 		for pr in prs:
 			count+=1
 		return count
+
+	def get_pulls_over_time(self):
+		prs = self.repo.get_pulls()
+		list_pull_dates = []
+		dates = defaultdict(int)
+		for p in prs:
+			list_pull_dates.append(p.created_at)
+		pulls_over_time = self.bucketize_dates(list_pull_dates)
+		return pulls_over_time
 
 	def get_stars_over_time(self):
 		print "stars"
@@ -59,23 +83,46 @@ class Repo:
 		forks_over_time = self.bucketize_dates(list_fork_dates)
 		return forks_over_time
 
+	# def get_change_stats_over_time(self):
+	# 	"""
+	# 	return a list of 3 values [files_changed,additions,deletions]
+	# 	"""
+	# 	# date = datetime.datetime(2015,2,15)
+	# 	print "change"
+	# 	changes_over_time = defaultdict(lambda: [0,0,0])
+	# 	for commit in self.repo.get_commits():
+	# 		num_files_changed = len(commit.files)
+	# 		timestamp = commit.commit.author.date
+	# 		yearMonth,day = str(timestamp).rsplit("-",1)
+	# 		additions = commit.stats.additions
+	# 		deletions = commit.stats.deletions
+	# 		changes_over_time[yearMonth][0]+=num_files_changed
+	# 		changes_over_time[yearMonth][1]+=additions
+	# 		changes_over_time[yearMonth][2]+=deletions
+	# 	return changes_over_time
+
+	def get_watchers_over_time(self):
+		list_watcher_dates = []
+		watchers = self.repo.get_watchers()
+
 	def get_change_stats_over_time(self):
 		"""
 		return a list of 3 values [files_changed,additions,deletions]
 		"""
 		# date = datetime.datetime(2015,2,15)
-		print "change"
 		changes_over_time = defaultdict(lambda: [0,0,0])
 		for commit in self.repo.get_commits():
-			num_files_changed = len(commit.files)
-			timestamp = commit.commit.author.date
-			yearMonth,day = str(timestamp).rsplit("-",1)
-			additions = commit.stats.additions
-			deletions = commit.stats.deletions
-			changes_over_time[yearMonth][0]+=num_files_changed
-			changes_over_time[yearMonth][1]+=additions
-			changes_over_time[yearMonth][2]+=deletions
+			for f in commit.files:
+				if self.is_documentation(f.filename):
+					timestamp = commit.commit.author.date
+					yearMonth,day = str(timestamp).rsplit("-",1)
+
+					changes_over_time[yearMonth][0]+=1
+					changes_over_time[yearMonth][1]+=f.additions
+					changes_over_time[yearMonth][2]+=f.deletions
 		return changes_over_time
+
+
 	
 	def get_change_stats_over_time_method2(self):
 		"""
