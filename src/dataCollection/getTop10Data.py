@@ -39,6 +39,7 @@ class Repo:
 		self.pulls_over_time = self.get_pulls_over_time()
 		self.stars_over_time = self.get_stars_over_time()
 		self.forks_over_time = self.get_forks_over_time()
+		self.get_issues_over_time = self.get_issues_over_time()
 		self.change_stats_over_time = self.get_change_stats_over_time()
 		self.change_stats_over_time_method2 = self.get_change_stats_over_time_method2()
 
@@ -86,10 +87,10 @@ class Repo:
 
 	def get_issues_over_time(self):
 		print "issues"
-		issues = self.repo.get_issues()
+		issues = self.repo.get_issues_comments()
 		list_issues_dates = []
 		for issue in issues:
-			list_issues_dates.append(issues.created_at)
+			list_issues_dates.append(issue.created_at)
 		issues_over_time = self.bucketize_dates(list_issues_dates)
 		return issues_over_time
 
@@ -111,9 +112,6 @@ class Repo:
 	# 		changes_over_time[yearMonth][2]+=deletions
 	# 	return changes_over_time
 
-	def get_watchers_over_time(self):
-		list_watcher_dates = []
-		watchers = self.repo.get_watchers()
 
 	def get_change_stats_over_time(self):
 		"""
@@ -173,16 +171,16 @@ if __name__ == '__main__':
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
-		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time,r.pulls_over_time]}
+		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time,r.pulls_over_time,r.get_issues_over_time]}
 		i += 1
 		f = open('../../data/' + str(i) + '.json', "wr")
 		f.write(json.dumps(stats))
 		f.close()
 
-		stats2 = {project:[r.change_stats_over_time_method2]}
-		f = open('../../data/method2-on-dataset' + str(i) + '.json', "wr")
-		f.write(json.dumps(stats2))
-		f.close()
+		# stats2 = {project:[r.change_stats_over_time_method2]}
+		# f = open('../../data/method2-on-dataset' + str(i) + '.json', "wr")
+		# f.write(json.dumps(stats2))
+		# f.close()
 
 
 	
