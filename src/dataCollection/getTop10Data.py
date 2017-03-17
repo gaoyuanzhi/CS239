@@ -84,6 +84,15 @@ class Repo:
 		forks_over_time = self.bucketize_dates(list_fork_dates)
 		return forks_over_time
 
+	def get_issues_over_time(self):
+		print "issues"
+		issues = self.repo.get_issues()
+		list_issues_dates = []
+		for issue in issues:
+			list_issues_dates.append(issues.created_at)
+		issues_over_time = self.bucketize_dates(list_issues_dates)
+		return issues_over_time
+
 	# def get_change_stats_over_time(self):
 	# 	"""
 	# 	return a list of 3 values [files_changed,additions,deletions]
