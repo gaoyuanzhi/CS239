@@ -51,7 +51,25 @@ def generatePopularityChagneGraph(id):
 		flagTime = add_months(flagTime,1)
 	xy1 = collections.OrderedDict(sorted(xy1.items()))
 
-	popularity = dict((collections.Counter(xy0)+collections.Counter(xy1)))
+
+	# order pull data
+	xy2 = {}
+	for key, value in projectValue[3].items():
+		xy2.update({datetime.datetime.strptime(key, '%Y-%m'):value})
+
+	xy2 = collections.OrderedDict(sorted(xy2.items()))
+
+	flagTime = xy2.keys()[0]
+	while flagTime < datetime.datetime.now():
+		if flagTime in xy2.keys():
+			pass
+		else:
+			xy2.update({flagTime: 0})
+		flagTime = add_months(flagTime,1)
+	xy2 = collections.OrderedDict(sorted(xy2.items()))
+
+
+	popularity = dict((collections.Counter(xy0)+collections.Counter(xy1)+(collections.Counter(xy2)^2)))
 	popularity = collections.OrderedDict(sorted(popularity.items()))
 
 
@@ -85,6 +103,7 @@ def generatePopularityChagneGraph(id):
 	fig, ax = plt.subplots()
 	ax.plot(xy0.keys(),xy0.values(),'k--', label='stars')
 	ax.plot(xy1.keys(),xy1.values(),'k:', label='forks')
+	ax.plot(xy2.keys(),xy2.values(),'k', label='pulls')
 	ax.plot(popularity.keys(),popularity.values(),'k',color = 'green',label='popularity')
 	# ax.set_xlabel('Time')
 	legend = ax.legend(loc='upper left', shadow=False,  fontsize='small')
