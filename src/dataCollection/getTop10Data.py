@@ -172,7 +172,7 @@ if __name__ == '__main__':
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
-		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time]}
+		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time,r.pulls_over_time]}
 		i += 1
 		f = open('../../data/' + str(i) + '.json', "wr")
 		f.write(json.dumps(stats))
@@ -185,4 +185,3 @@ if __name__ == '__main__':
 
 
 	
-
