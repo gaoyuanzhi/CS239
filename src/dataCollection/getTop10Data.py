@@ -90,7 +90,7 @@ class Repo:
 		for issue in issues:
 			list_issues_dates.append(issues.created_at)
 		issues_over_time = self.bucketize_dates(list_issues_dates)
-		return starts_over_time
+		return issues_over_time
 
 	# def get_change_stats_over_time(self):
 	# 	"""
