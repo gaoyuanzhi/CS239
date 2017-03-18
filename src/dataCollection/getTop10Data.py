@@ -6,7 +6,6 @@ import json
 import os
 
 
-
 class Repo:
 	def __init__(self,repo):
 		self.repo = repo
@@ -156,7 +155,7 @@ if __name__ == '__main__':
 	ACCESS_TOKEN = conf.access_token
 	client = Github(ACCESS_TOKEN, per_page=100)
 	
-	f = open('../../data/top10MLProjects.txt', "r")
+	f = open('../../data/Repos.txt', "r")
 	projects = f.readlines()
 	f.close()
 	projects = [x.strip() for x in projects]
@@ -173,7 +172,7 @@ if __name__ == '__main__':
 		r.get_repo_stats()
 		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time,r.pulls_over_time,r.get_issues_over_time]}
 		i += 1
-		f = open('../../data/' + str(i) + '.json', "wr")
+		f = open('../../data2/' + str(i) + '.json', "wr")
 		f.write(json.dumps(stats))
 		f.close()
 
