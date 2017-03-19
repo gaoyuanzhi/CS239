@@ -40,7 +40,7 @@ class Repo:
 		self.forks_over_time = self.get_forks_over_time()
 		self.get_issues_over_time = self.get_issues_over_time()
 		self.change_stats_over_time = self.get_change_stats_over_time()
-		self.change_stats_over_time_method2 = self.get_change_stats_over_time_method2()
+		# self.change_stats_over_time_method2 = self.get_change_stats_over_time_method2()
 
 	def bucketize_dates(self, list_of_dates):
 		dates = defaultdict(int)
@@ -159,20 +159,22 @@ if __name__ == '__main__':
 	projects = f.readlines()
 	f.close()
 	projects = [x.strip() for x in projects]
-	# print projects
+	print projects
+
+
+	# projects = ["securestate/eapeak"]
 
 	stats = []
 	stats2 = []
 	i = 0
 	for project in projects:
-
 		print "Project: {}".format(project)
 		repo = client.get_repo(project)
 		r = Repo(repo)
 		r.get_repo_stats()
 		stats = {project:[r.stars_over_time,r.forks_over_time,r.change_stats_over_time,r.pulls_over_time,r.get_issues_over_time]}
 		i += 1
-		f = open('../../data2/' + str(i) + '.json', "wr")
+		f = open('../../data2/'+str(i)+'.json', "wr")
 		f.write(json.dumps(stats))
 		f.close()
 

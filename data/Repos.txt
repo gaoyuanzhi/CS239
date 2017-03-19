@@ -5,6 +5,6 @@ sparkling-graph/sparkling-graph
 xplico/xplico
 networkl/networkl
 ivan-brugere/Bitcoin-Transaction-Network-Extraction
-securestate/eapeak
+AmazaspShumik/sklearn-bayes
 pik-copan/pyunicorn
 cytoscape/cytoscape

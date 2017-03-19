@@ -139,6 +139,6 @@ def generatePopularityChagneGraph(id):
 	f.close()
 	
 if __name__ == '__main__':
-	for x in xrange(1,8):
+	for x in range(1,11):
 		generatePopularityChagneGraph(x)
 	# generatePopularityChagneGraph(2)
