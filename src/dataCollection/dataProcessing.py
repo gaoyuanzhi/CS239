@@ -18,9 +18,18 @@ def add_months(sourcedate,months):
 def generatePopularityChagneGraph(id):
 	f = open('../../data2/'+str(id)+'.json', "r")
 	jsonData = (f.readlines())[0]
+	f.close()
+
+	f = open('../../data2_2/'+str(id)+'.json', "r")
+	jsonData2 = (f.readlines())[0]
+	f.close()
+
 	data = json.loads(jsonData)
+	data2 = json.loads(jsonData2)
+
 	projectName = data.keys()[0]
 	projectValue = data.values()[0]
+	projectValue2 = data2.values()[0]
 
 
 	# calculate changes
@@ -90,8 +99,52 @@ def generatePopularityChagneGraph(id):
 		flagTime = add_months(flagTime,1)
 	xy2 = collections.OrderedDict(sorted(xy2.items()))
 
+	# issue data
+	xy3 = {}
+	for key, value in projectValue[4].items():
+		xy3.update({datetime.datetime.strptime(key, '%Y-%m'):pow(value,2)})
 
-	popularity = dict(collections.Counter(xy0)+collections.Counter(xy1)+collections.Counter(xy2))
+	xy3 = collections.OrderedDict(sorted(xy3.items()))
+
+	flagTime = changes.keys()[0]
+	while flagTime < datetime.datetime.now():
+		if flagTime in xy3.keys():
+			pass
+		else:
+			xy3.update({flagTime: 0})
+		flagTime = add_months(flagTime,1)
+	xy3 = collections.OrderedDict(sorted(xy3.items()))
+
+
+	# readme change
+	xy4 = {}
+	for key, value in projectValue2[0].items():
+		xy4.update({datetime.datetime.strptime(key, '%Y-%m'):value})
+
+	xy4 = collections.OrderedDict(sorted(xy4.items()))
+
+	flagTime = changes.keys()[0]
+	while flagTime < datetime.datetime.now():
+		if flagTime in xy4.keys():
+			pass
+		else:
+			xy4.update({flagTime: 0})
+		flagTime = add_months(flagTime,1)
+	xy4 = collections.OrderedDict(sorted(xy4.items()))
+
+
+
+	# # method 1 readme / stars
+	popularity = dict(collections.Counter(xy0))
+	changes = xy4;
+
+	# # method 2
+	# popularity = dict(collections.Counter(xy0)+collections.Counter(xy1)+collections.Counter(xy2))
+
+	# method 3
+	# popularity = dict(collections.Counter(xy0)+collections.Counter(xy1)+collections.Counter(xy2)+collections.Counter(xy3))
+
+
 	popularity = collections.OrderedDict(sorted(popularity.items()))
 
 
@@ -109,13 +162,13 @@ def generatePopularityChagneGraph(id):
 			listOfChange.append(value)
 			listOfPop.append(0)
 
-	print spearmanr(listOfChange,listOfPop)
+	print str(np.mean(listOfChange)) + "\t" + str(np.mean(listOfPop)) +"\t" + str(pearsonr(listOfChange,listOfPop)[0]) + "\t"+ str(spearmanr(listOfChange,listOfPop)[0])
 
 	# with plt.xkcd():
 	fig, ax = plt.subplots()
-	ax.plot(xy0.keys(),xy0.values(),'k--', label='stars')
-	ax.plot(xy1.keys(),xy1.values(),'k:', label='forks')
-	ax.plot(xy2.keys(),xy2.values(),'k', label='pulls')
+	# ax.plot(xy0.keys(),xy0.values(),'k--', label='stars')
+	# ax.plot(xy1.keys(),xy1.values(),'k:', label='forks')
+	# ax.plot(xy2.keys(),xy2.values(),'k', label='pulls')
 	ax.plot(popularity.keys(),popularity.values(),'k',color = 'green',label='popularity')
 	# ax.set_xlabel('Time')
 	legend = ax.legend(loc='upper left', shadow=False,  fontsize='small')
@@ -134,7 +187,7 @@ def generatePopularityChagneGraph(id):
 	f = open("../../data2/p_c_"+str(id)+".tsv",'wr')
 	f.write("date\tpupularity\tchange")
 	for x in output:
-		f.write("\n{}\t{}\t{}".format(x[0].strftime("%Y%m%d"),x[1],x[2]))
+		f.write("\n{}\t{}\t{}".format(x[0].strftime("%Y %m"),x[1],x[2]))
 	plt.savefig("../../data2/fig/" + str(id)+".pdf")
 	f.close()
 	
